@@ -3,23 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Happy Birthday – Star of the Sea</title>
+  <title>Star of the Sea</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
-      height: 100vh;
+    html, body {
+      height: 100%;
       overflow: hidden;
       font-family: 'Segoe UI', sans-serif;
       color: white;
       position: relative;
     }
 
-    /* ✅ Fixed background */
     body::before {
       content: '';
       position: fixed;
@@ -28,22 +23,6 @@
       background: url('ocean-1.jpg') no-repeat center center;
       background-size: cover;
       z-index: -1;
-    }
-
-    /* 🎵 Mute button */
-    #mute-toggle {
-      position: fixed;
-      top: 10px;
-      right: 15px;
-      font-size: 22px;
-      background: rgba(0, 0, 0, 0.3);
-      border: none;
-      border-radius: 50%;
-      color: white;
-      cursor: pointer;
-      z-index: 20;
-      width: 36px;
-      height: 36px;
     }
 
     .moon {
@@ -61,34 +40,34 @@
 
     .message {
       position: absolute;
-      top: 45%;
+      top: 44%;
       left: 50%;
       transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 600px;
       text-align: center;
       z-index: 10;
-      padding: 0 15px;
       animation: fadein 2s ease-in;
       line-height: 1.6;
     }
 
-    .english, .tamil {
+    .line {
+      font-size: 1em;
+      font-weight: 500;
       background: linear-gradient(90deg, #fefcea, #f1da36);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      display: none;
+      opacity: 1;
+      transition: opacity 1s ease;
     }
 
-    .tamil {
-      font-size: 0.85em;
+    .line.hidden {
+      opacity: 0;
     }
 
     @keyframes fadein {
       0% { opacity: 0; transform: translate(-50%, -40%) }
       100% { opacity: 1; transform: translate(-50%, -50%) }
-    }
-
-    .emoji {
-      margin-top: 10px;
     }
 
     .star {
@@ -116,7 +95,7 @@
     .comet {
       position: absolute;
       top: 13vh;
-      left: -200px;
+      left: 0;
       width: 160px;
       height: 2.5px;
       background: linear-gradient(to left, white, rgba(255, 200, 0, 0.8), rgba(255, 105, 180, 0.4), rgba(255, 20, 147, 0.2), transparent);
@@ -126,6 +105,7 @@
       animation: flyComet 14s linear forwards;
       z-index: 9;
       opacity: 0.9;
+      will-change: transform;
     }
 
     .comet::before {
@@ -144,115 +124,92 @@
     }
 
     @keyframes flyComet {
-      0% { left: -200px; opacity: 0; }
-      10% { opacity: 1; }
-      50% { left: 50vw; }
-      100% { left: 110vw; opacity: 0; }
+      0%   { transform: translateX(-200px); opacity: 0; }
+      10%  { opacity: 1; }
+      100% { transform: translateX(130vw); opacity: 0; }
+    }
+
+    @media (max-width: 480px) {
+      .moon { width: 12vw; height: 12vw; }
+      .line { font-size: 0.8em; }
     }
   </style>
 </head>
 <body>
 
-<!-- 🔇🔊 Mute toggle -->
-<button id="mute-toggle">🔇</button>
+  <!-- 🌕 Moon -->
+  <div class="moon"></div>
 
-<!-- 🎵 Background Music -->
-<audio id="bg-music" autoplay loop muted playsinline>
-  <source src="hb.mp3" type="audio/mpeg" />
-  Your browser does not support the audio element.
-</audio>
+  <!-- 🎵 Audio -->
+  <audio id="bg-music" autoplay loop muted playsinline>
+    <source src="hb.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
 
-<!-- 🌕 Moon -->
-<div class="moon"></div>
-
-<!-- 🌟 Birthday Message -->
-<div class="message">
-  <div class="english text">
-    ✨ Happy Birthday to the <strong>Star of the Sea</strong><br>
-    A soul as radiant as the cosmos,<br>
-    a spark that dances above the waves,<br>
-    lighting hearts like stars in the night sky.<br>
-    May your name echo where stars meet the sea.
+  <!-- ✨ Message Area -->
+  <div class="message">
+    <div class="line" id="line-en">
+      ✨ Happy Birthday to the <strong>Star of the Sea</strong><br>
+      A soul as radiant as the cosmos,<br>
+      a spark that dances above the waves,<br>
+      lighting hearts like stars in the night sky.<br>
+      May your name echo where stars meet the sea.
+    </div>
+    <div class="line hidden" id="line-ta">
+      🌊 கடலின் ஆழத்திலிருந்து<br>
+      விண்மீனின் ஒளிக்குச் செல்லும் பயணத்தில்,<br>
+      'பிரகாசமான நட்சத்திரம்' இப்போது பிறந்த நாளைக் கொண்டாடுகிறார்.<br><br>
+      ✨ உங்கள் ஒவ்வொரு நாளும்,<br>
+      ஒரு நட்சத்திரம் போலத் திகழட்டும்,<br>
+      ஒரு அலை போல பறக்கட்டும்.<br><br>
+      💫 பூங்குயில் குரூப்ஸ் சார்பாக,<br>
+      மனமார்ந்த பிறந்த நாள் நல்வாழ்த்துகள்!
+    </div>
   </div>
 
-  <div class="tamil text">
-    🌊 கடலின் ஆழத்திலிருந்து<br>
-    விண்மீனின் ஒளிக்குச் செல்லும் பயணத்தில்,<br>
-    'பிரகாசமான நட்சத்திரம்' இப்போது பிறந்த நாளைக் கொண்டாடுகிறார்.<br><br>
-    ✨ உங்கள் ஒவ்வொரு நாளும்,<br>
-    ஒரு நட்சத்திரம் போலத் திகழட்டும்,<br>
-    ஒரு அலை போல பறக்கட்டும்.<br><br>
-    💫 பூங்குயில் குரூப்ஸ் சார்பாக,<br>
-    மனமார்ந்த பிறந்த நாள் நல்வாழ்த்துகள்!
-  </div>
+  <!-- 🌠 Scripts -->
+  <script>
+    // Toggle Tamil/English sentences
+    const lineEn = document.getElementById('line-en');
+    const lineTa = document.getElementById('line-ta');
+    setInterval(() => {
+      lineEn.classList.toggle('hidden');
+      lineTa.classList.toggle('hidden');
+    }, 8000); // switch every 8 seconds
 
-  <div class="emoji">🌟🌊</div>
-</div>
+    // Audio toggle on tap
+    const audio = document.getElementById('bg-music');
+    window.addEventListener('click', () => {
+      audio.muted = !audio.muted;
+      if (!audio.paused) {
+        audio.play().catch(err => console.warn("Playback issue:", err));
+      }
+    });
 
-<!-- ✨ Star Rain -->
-<script>
-  function createStarRain() {
-    const item = document.createElement('div');
-    const emojis = ['✦','✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
-    item.className = 'star';
-    item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-    item.style.left = Math.random() * 100 + 'vw';
-    item.style.fontSize = (4 + Math.random() * 4) + 'px';
-    const duration = (2 + Math.random() * 3);
-    item.style.animationDuration = `${duration}s, 1.5s`;
-    document.body.appendChild(item);
-    setTimeout(() => item.remove(), duration * 1000);
-  }
-  setInterval(createStarRain, 100);
-</script>
-
-<!-- ☄️ Comets -->
-<script>
-  function createComet() {
-    const comet = document.createElement('div');
-    comet.className = 'comet';
-    document.body.appendChild(comet);
-    setTimeout(() => comet.remove(), 14000);
-  }
-  setInterval(createComet, 16000);
-  createComet();
-</script>
-
-<!-- 🔁 Message toggle -->
-<script>
-  const english = document.querySelector('.english');
-  const tamil = document.querySelector('.tamil');
-
-  function toggleMessages() {
-    if (english.style.display === 'none') {
-      english.style.display = 'inline-block';
-      tamil.style.display = 'none';
-    } else {
-      english.style.display = 'none';
-      tamil.style.display = 'inline-block';
+    // Star rain
+    function createStarRain() {
+      const item = document.createElement('div');
+      const emojis = ['✦','✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
+      item.className = 'star';
+      item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+      item.style.left = Math.random() * 100 + 'vw';
+      item.style.fontSize = (4 + Math.random() * 4) + 'px';
+      const duration = (2 + Math.random() * 3);
+      item.style.animationDuration = `${duration}s, 1.5s`;
+      document.body.appendChild(item);
+      setTimeout(() => item.remove(), duration * 1000);
     }
-  }
+    setInterval(createStarRain, 100);
 
-  english.style.display = 'inline-block';
-  setInterval(toggleMessages, 6000); // every 6 seconds
-</script>
-
-<!-- 🔊 Mute toggle -->
-<script>
-  const audio = document.getElementById('bg-music');
-  const btn = document.getElementById('mute-toggle');
-
-  btn.addEventListener('click', () => {
-    audio.muted = !audio.muted;
-    btn.textContent = audio.muted ? '🔇' : '🔊';
-  });
-
-  window.addEventListener('click', function () {
-    audio.muted = false;
-    audio.play().catch(() => {});
-    btn.textContent = '🔊';
-  }, { once: true });
-</script>
-
+    // Comet
+    function createComet() {
+      const comet = document.createElement('div');
+      comet.className = 'comet';
+      document.body.appendChild(comet);
+      setTimeout(() => comet.remove(), 14000);
+    }
+    setInterval(createComet, 16000);
+    createComet(); // initial
+  </script>
 </body>
 </html>
