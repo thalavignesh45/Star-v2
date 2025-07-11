@@ -15,9 +15,7 @@
       color: white;
     }
 
-    /* ✅ background image layered below everything */
-    body::before {
-      content: '';
+    .bg {
       position: fixed;
       top: 0;
       left: 0;
@@ -25,7 +23,7 @@
       height: 100%;
       background: url('ocean-1.jpg') no-repeat center center;
       background-size: cover;
-      z-index: -1;
+      z-index: -100;
     }
 
     .moon {
@@ -151,6 +149,9 @@
   </style>
 </head>
 <body>
+  <!-- ✅ Fixed background -->
+  <div class="bg"></div>
+
   <!-- 🎵 Audio -->
   <audio id="bg-music" autoplay loop muted playsinline>
     <source src="hb.mp3" type="audio/mpeg" />
@@ -181,7 +182,7 @@
   </div>
 
   <script>
-    // ✦ More star rain, rare extras
+    // ✦ More star rain
     function createStarRain() {
       const item = document.createElement('div');
       const emojis = ['✦','✦','✦','✦','✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
@@ -198,7 +199,7 @@
   </script>
 
   <script>
-    // ☄️ Comet stays as is
+    // ☄️ Comet animation
     function createComet() {
       const comet = document.createElement('div');
       comet.className = 'comet';
