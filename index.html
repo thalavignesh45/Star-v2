@@ -1,21 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ta">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Star of the Sea</title>
+  <title>Poonguyil Wishes</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      height: 100vh;
       font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
       position: relative;
       color: white;
     }
@@ -23,13 +17,11 @@
     body::before {
       content: '';
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background: url('ocean-1.jpg') no-repeat center center;
       background-size: cover;
-      z-index: -1;
+      z-index: -2;
     }
 
     .moon {
@@ -45,28 +37,67 @@
       opacity: 0.85;
     }
 
+    .flag {
+      position: absolute;
+      top: 1vh;
+      left: 7vw;
+      z-index: 10;
+      animation: appearFlag 6s ease-in-out infinite;
+    }
+
+    .flag-pole {
+      width: 2px;
+      height: 40px;
+      background: #888;
+      margin-left: 10px;
+    }
+
+    .flag-banner {
+      background: red;
+      color: white;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 2px 6px 6px 2px;
+      animation: wave 1s infinite ease-in-out alternate;
+      transform-origin: left;
+      white-space: nowrap;
+    }
+
+    @keyframes wave {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(4deg); }
+    }
+
+    @keyframes appearFlag {
+      0%, 70% { opacity: 0; transform: scale(0.8); }
+      75%, 90% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.8); }
+    }
+
     .message {
       position: absolute;
-      top: 42%;
+      top: 45%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 1em;
+      font-size: 1.2em;
       font-weight: 500;
       text-align: center;
       z-index: 10;
       padding: 0 15px;
-      animation: fadein 2s ease-in;
       line-height: 1.6;
+      animation: fadein 2s ease-in;
     }
 
-    .message .text {
+    .text {
       background: linear-gradient(90deg, #fefcea, #f1da36);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       display: inline-block;
+      transition: opacity 1s ease;
     }
 
-    .message .emoji {
+    .emoji {
       display: inline-block;
       margin-top: 10px;
     }
@@ -104,14 +135,7 @@
       left: -200px;
       width: 160px;
       height: 2.5px;
-      background: linear-gradient(
-        to left,
-        white,
-        rgba(255, 200, 0, 0.8),
-        rgba(255, 105, 180, 0.4),
-        rgba(255, 20, 147, 0.2),
-        transparent
-      );
+      background: linear-gradient(to left, white, rgba(255, 200, 0, 0.8), rgba(255, 105, 180, 0.4), rgba(255, 20, 147, 0.2), transparent);
       filter: blur(1px);
       border-radius: 50%;
       box-shadow: 0 0 4px 3px rgba(255, 160, 0, 0.3);
@@ -128,16 +152,10 @@
       transform: translateX(-100%);
       width: 16px;
       height: 6px;
-      background: linear-gradient(90deg,
-        rgba(255, 255, 255, 0.9),
-        rgba(255, 215, 0, 0.6),
-        rgba(255, 165, 0, 0.4)
-      );
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(255, 215, 0, 0.6), rgba(255, 165, 0, 0.4));
       border-radius: 50%;
       filter: blur(1px);
-      box-shadow:
-        0 0 6px 2px rgba(255, 248, 220, 0.4),
-        0 0 12px 4px rgba(255, 215, 0, 0.3);
+      box-shadow: 0 0 6px 2px rgba(255, 248, 220, 0.4), 0 0 12px 4px rgba(255, 215, 0, 0.3);
       opacity: 0.95;
     }
 
@@ -145,7 +163,23 @@
       0% { left: -200px; opacity: 0; }
       10% { opacity: 1; }
       50% { left: 50vw; }
-      100% { left: 100vw; opacity: 0; } /* FIXED from 110vw */
+      100% { left: 110vw; opacity: 0; }
+    }
+
+    #audio-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      user-select: none;
+      z-index: 100;
+      transition: background 0.3s;
     }
 
     @media (max-width: 480px) {
@@ -155,42 +189,39 @@
   </style>
 </head>
 <body>
-  <!-- 🎵 Background Music -->
-  <audio id="bg-music" autoplay loop muted playsinline>
+  <!-- Audio -->
+  <audio id="bg-music" loop playsinline>
     <source src="hb.mp3" type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
-  <script>
-    // 🎵 Unmute on first user interaction (for mobile)
-    window.addEventListener('click', function () {
-      const audio = document.getElementById('bg-music');
-      if (audio) {
-        audio.muted = false;
-        audio.play().catch(err => console.warn("Playback blocked:", err));
-      }
-    }, { once: true });
-  </script>
 
-  <!-- 🌕 Moon -->
+  <div id="audio-toggle">🔊 Music</div>
+
+  <!-- Moon + Flag -->
   <div class="moon"></div>
+  <div class="flag">
+    <div class="flag-pole"></div>
+    <div class="flag-banner">பூங்குயில் குரூப்ஸ்</div>
+  </div>
 
-  <!-- 🎉 Message -->
+  <!-- Message -->
   <div class="message">
-    <div class="text">
-      ✨ Happy Birthday to the <strong>Star of the Sea</strong><br>
+    <div class="text" id="wish-text">
+      ✨ Happy Birthday to the Star of the Sea.<br>
       A soul as radiant as the cosmos,<br>
-      a spark that dances above the waves,<br>
+      dancing above the waves,<br>
       lighting hearts like stars in the night sky.<br>
-      May your name echo where stars meet the sea.
+      May your name echo where stars meet the sea. 🌊
     </div>
     <div class="emoji">🌟🌊</div>
   </div>
 
-  <!-- ✦ Star Rain -->
+  <!-- JS -->
   <script>
+    // Star Rain
     function createStarRain() {
       const item = document.createElement('div');
-      const emojis = ['✦','✦','✦','✦','✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
+      const emojis = ['✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
       item.className = 'star';
       item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
       item.style.left = Math.random() * 100 + 'vw';
@@ -201,10 +232,8 @@
       setTimeout(() => item.remove(), duration * 1000);
     }
     setInterval(createStarRain, 100);
-  </script>
 
-  <!-- ☄️ Comet -->
-  <script>
+    // Comet
     function createComet() {
       const comet = document.createElement('div');
       comet.className = 'comet';
@@ -213,6 +242,51 @@
     }
     setInterval(createComet, 16000);
     createComet();
+
+    // Toggle Wish Text (English / Tamil)
+    const wishText = document.getElementById('wish-text');
+    const en = `✨ Happy Birthday to the Star of the Sea.<br>
+      A soul as radiant as the cosmos,<br>
+      dancing above the waves,<br>
+      lighting hearts like stars in the night sky.<br>
+      May your name echo where stars meet the sea. 🌊`;
+    const ta = `🌊 கடலின் ஆழத்திலிருந்து<br>
+விண்மீனின் ஒளிக்குச் செல்லும் பயணத்தில்,<br>
+'பிரகாசமான நட்சத்திரம்' இப்போது பிறந்த நாளைக் கொண்டாடுகிறார்.<br><br>
+✨ உங்கள் ஒவ்வொரு நாளும்,<br>
+ஒரு நட்சத்திரம் போலத் திகழட்டும்,<br>
+ஒரு அலை போல பறக்கட்டும்.<br><br>
+💫 பூங்குயில் குரூப்ஸ் சார்பாக, மனமார்ந்த பிறந்த நாள் நல்வாழ்த்துகள்!`;
+
+    let showTamil = false;
+    setInterval(() => {
+      wishText.style.opacity = 0;
+      setTimeout(() => {
+        wishText.innerHTML = showTamil ? en : ta;
+        wishText.style.opacity = 1;
+        showTamil = !showTamil;
+      }, 1000);
+    }, 9000);
+
+    // Audio Toggle
+    const audio = document.getElementById('bg-music');
+    const toggle = document.getElementById('audio-toggle');
+    let isPlaying = false;
+    toggle.addEventListener('click', async () => {
+      try {
+        if (!isPlaying) {
+          await audio.play();
+          toggle.textContent = '🔇 Mute';
+          isPlaying = true;
+        } else {
+          audio.pause();
+          toggle.textContent = '🔊 Music';
+          isPlaying = false;
+        }
+      } catch (e) {
+        console.warn("Playback error:", e);
+      }
+    });
   </script>
 </body>
 </html>
