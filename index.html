@@ -13,6 +13,8 @@
       font-family: 'Segoe UI', sans-serif;
       color: white;
       position: relative;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body::before {
@@ -37,17 +39,10 @@
       z-index: 8;
       opacity: 0.85;
       transition: transform 0.2s ease;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      outline: none;
     }
 
     .moon:active {
-      transform: scale(1.06);
-    }
-
-    .moon:focus {
-      outline: none;
+      transform: scale(1.05);
     }
 
     .message {
@@ -75,8 +70,6 @@
 
     .line.hidden {
       opacity: 0;
-      pointer-events: none;
-      position: absolute;
     }
 
     #line-ta {
@@ -157,11 +150,11 @@
 </head>
 <body>
 
-  <!-- 🌕 Moon (used to toggle audio) -->
-  <div class="moon" id="moon" tabindex="-1"></div>
+  <!-- 🌕 Moon -->
+  <div class="moon" id="moon-btn"></div>
 
   <!-- 🎵 Audio -->
-  <audio id="bg-music" autoplay loop muted playsinline>
+  <audio id="bg-music" autoplay loop playsinline>
     <source src="hb.mp3" type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
@@ -192,26 +185,26 @@
     const lineEn = document.getElementById('line-en');
     const lineTa = document.getElementById('line-ta');
     const audio = document.getElementById('bg-music');
-    const moon = document.getElementById('moon');
+    const moon = document.getElementById('moon-btn');
 
-    // Toggle text
+    // Toggle sentences
     setInterval(() => {
       lineEn.classList.toggle('hidden');
       lineTa.classList.toggle('hidden');
     }, 8000);
 
-    // Toggle audio by tapping the moon
+    // Toggle audio on moon click
     moon.addEventListener('click', () => {
       audio.muted = !audio.muted;
-      if (!audio.paused) {
-        audio.play().catch(err => console.warn("Playback issue:", err));
+      if (!audio.muted) {
+        audio.play().catch(err => console.warn("Audio error:", err));
       }
     });
 
-    // Star & emoji rain
+    // Star rain
     function createStarRain() {
       const item = document.createElement('div');
-      const emojis = ['✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
+      const emojis = ['✦','✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
       item.className = 'star';
       item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
       item.style.left = Math.random() * 100 + 'vw';
@@ -223,7 +216,7 @@
     }
     setInterval(createStarRain, 100);
 
-    // Comets
+    // Comet
     function createComet() {
       const comet = document.createElement('div');
       comet.className = 'comet';
