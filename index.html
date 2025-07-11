@@ -37,18 +37,23 @@
       z-index: 10;
       opacity: 0.85;
       cursor: pointer;
+      transition: transform 0.3s ease;
+      outline: none;
+      border: none;
+      appearance: none;
       -webkit-tap-highlight-color: transparent;
     }
 
     .moon.shake {
-      animation: shake 0.5s ease;
+      animation: shakeMoon 0.5s ease;
     }
 
-    @keyframes shake {
-      0%, 100% { transform: translate(0); }
-      25% { transform: translate(-2px, 1px); }
+    @keyframes shakeMoon {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(-2px, 2px); }
       50% { transform: translate(2px, -2px); }
-      75% { transform: translate(-1px, 2px); }
+      75% { transform: translate(-2px, -2px); }
+      100% { transform: translate(0, 0); }
     }
 
     .message {
@@ -59,7 +64,7 @@
       width: 90%;
       max-width: 600px;
       text-align: center;
-      z-index: 10;
+      z-index: 5;
       animation: fadein 2s ease-in;
       line-height: 1.6;
     }
@@ -76,8 +81,6 @@
 
     .line.hidden {
       opacity: 0;
-      position: absolute;
-      pointer-events: none;
     }
 
     #line-ta {
@@ -124,7 +127,6 @@
       animation: flyComet 14s linear forwards;
       z-index: 9;
       opacity: 0.9;
-      will-change: transform;
       pointer-events: none;
     }
 
@@ -158,8 +160,8 @@
 </head>
 <body>
 
-  <!-- 🌕 Moon (Audio Toggle Button) -->
-  <div class="moon" id="moon-toggle"></div>
+  <!-- 🌕 Moon -->
+  <div class="moon" id="moon" tabindex="0" role="button" aria-label="moon sound toggle"></div>
 
   <!-- 🎵 Audio -->
   <audio id="bg-music" autoplay loop muted playsinline>
@@ -191,25 +193,27 @@
   <!-- 🌠 Scripts -->
   <script>
     const audio = document.getElementById('bg-music');
-    const moon = document.getElementById('moon-toggle');
+    const moon = document.getElementById('moon');
+    let audioStarted = false;
 
-    // Enable audio toggle via moon tap
     moon.addEventListener('click', () => {
-      const wasMuted = audio.muted;
-      audio.muted = !wasMuted;
-
-      if (!audio.paused && !wasMuted) {
-        audio.play().catch(err => console.warn("Playback issue:", err));
-      }
-
+      // Shake animation
       moon.classList.add('shake');
       setTimeout(() => moon.classList.remove('shake'), 500);
+
+      // Toggle audio
+      if (!audioStarted) {
+        audio.muted = false;
+        audio.play().catch(err => console.warn("Playback failed:", err));
+        audioStarted = true;
+      } else {
+        audio.muted = !audio.muted;
+      }
     });
 
-    // Text switching
+    // Sentence fade toggle
     const lineEn = document.getElementById('line-en');
     const lineTa = document.getElementById('line-ta');
-
     setInterval(() => {
       lineEn.classList.toggle('hidden');
       lineTa.classList.toggle('hidden');
@@ -218,7 +222,7 @@
     // Stars
     function createStarRain() {
       const item = document.createElement('div');
-      const emojis = ['✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
+      const emojis = ['✦','✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
       item.className = 'star';
       item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
       item.style.left = Math.random() * 100 + 'vw';
@@ -230,7 +234,7 @@
     }
     setInterval(createStarRain, 100);
 
-    // Comet
+    // Comets
     function createComet() {
       const comet = document.createElement('div');
       comet.className = 'comet';
