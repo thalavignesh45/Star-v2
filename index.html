@@ -27,47 +27,42 @@
 
     .moon {
       position: absolute;
-      top: 2.8vh;
+      top: 4vh;
       left: 6vw;
       width: 8vw;
       height: 8vw;
       background: radial-gradient(circle at center, #fff, #ccc);
       border-radius: 50%;
       box-shadow: 0 0 20px 6px #ffffff99;
-      z-index: 8;
+      z-index: 10;
       opacity: 0.85;
       transition: transform 0.3s ease;
-      user-select: none;
+      cursor: pointer;
     }
 
-    .moon:active {
-      outline: none;
+    .moon.shake {
+      animation: shakeMoon 0.4s ease;
     }
 
-    .shake {
-      animation: shake 0.4s ease;
-    }
-
-    @keyframes shake {
+    @keyframes shakeMoon {
       0% { transform: translate(0, 0); }
-      25% { transform: translate(-2px, 1px); }
-      50% { transform: translate(2px, -1px); }
-      75% { transform: translate(-1px, 1px); }
+      25% { transform: translate(2px, -2px); }
+      50% { transform: translate(-2px, 2px); }
+      75% { transform: translate(1px, -1px); }
       100% { transform: translate(0, 0); }
     }
 
     .message {
       position: absolute;
-      top: 52%;
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 92%;
-      max-width: 620px;
+      width: 90%;
+      max-width: 600px;
       text-align: center;
-      z-index: 5;
+      z-index: 10;
       animation: fadein 2s ease-in;
       line-height: 1.6;
-      padding: 0 5px;
     }
 
     .line {
@@ -163,7 +158,7 @@
 <body>
 
   <!-- 🌕 Moon -->
-  <div class="moon" id="moon"></div>
+  <div class="moon" id="moon" tabindex="0"></div>
 
   <!-- 🎵 Audio -->
   <audio id="bg-music" autoplay loop muted playsinline>
@@ -175,6 +170,7 @@
   <div class="message">
     <div class="line" id="line-en">
       ✨ Happy Birthday to the <strong>Star of the Sea</strong><br>
+      A soul as radiant as the cosmos,<br>
       a spark that dances above the waves,<br>
       lighting hearts like stars in the night sky.<br>
       May your name echo where stars meet the sea.
@@ -198,22 +194,27 @@
     const moon = document.getElementById('moon');
     const audio = document.getElementById('bg-music');
 
-    // Sentence toggle
+    // Toggle sentence every 8 seconds
     setInterval(() => {
       lineEn.classList.toggle('hidden');
       lineTa.classList.toggle('hidden');
     }, 8000);
 
-    // Moon click: play audio and shake
+    // Moon click = shake + toggle audio
     moon.addEventListener('click', () => {
       moon.classList.add('shake');
       setTimeout(() => moon.classList.remove('shake'), 400);
 
-      if (audio.muted) {
+      if (audio.muted || audio.paused) {
         audio.muted = false;
-        audio.play().catch(err => console.warn("Playback issue:", err));
+        audio.play().catch(e => console.warn('Play failed:', e));
+      } else {
+        audio.muted = true;
       }
     });
+
+    // Prevent square highlight on click
+    moon.style.outline = 'none';
 
     // Star rain
     function createStarRain() {
