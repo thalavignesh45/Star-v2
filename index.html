@@ -40,7 +40,7 @@
 
     .message {
       position: absolute;
-      top: 44%;
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       width: 90%;
@@ -52,25 +52,25 @@
     }
 
     .line {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
       font-size: 1em;
       font-weight: 500;
       background: linear-gradient(90deg, #fefcea, #f1da36);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      opacity: 1;
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
       transition: opacity 1s ease;
     }
 
-    .line.hidden {
-      opacity: 0;
-      pointer-events: none;
+    .line.visible {
+      opacity: 1;
     }
 
     #line-ta {
-      font-size: 0.88em;
+      font-size: 0.87em;
     }
 
     @keyframes fadein {
@@ -138,10 +138,28 @@
       100% { transform: translateX(130vw); opacity: 0; }
     }
 
+    #audio-toggle {
+      position: fixed;
+      top: 14px;
+      right: 16px;
+      font-size: 22px;
+      background: transparent;
+      border: none;
+      color: white;
+      cursor: pointer;
+      z-index: 99;
+      opacity: 0.7;
+    }
+
+    #audio-toggle:hover {
+      opacity: 1;
+    }
+
     @media (max-width: 480px) {
       .moon { width: 12vw; height: 12vw; }
       .line { font-size: 0.9em; }
-      #line-ta { font-size: 0.74em; line-height: 1.4; }
+      #line-ta { font-size: 0.76em; line-height: 1.4; }
+      #audio-toggle { font-size: 26px; top: 12px; right: 12px; }
     }
   </style>
 </head>
@@ -150,22 +168,25 @@
   <!-- 🌕 Moon -->
   <div class="moon"></div>
 
+  <!-- 🔊 Audio Button -->
+  <button id="audio-toggle">🔇</button>
+
   <!-- 🎵 Audio -->
-  <audio id="bg-music" autoplay loop muted playsinline>
+  <audio id="bg-music" autoplay muted loop playsinline>
     <source src="hb.mp3" type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
 
   <!-- ✨ Message Area -->
   <div class="message">
-    <div class="line" id="line-en">
+    <div class="line visible" id="line-en">
       ✨ Happy Birthday to the <strong>Star of the Sea</strong><br>
       A soul as radiant as the cosmos,<br>
       a spark that dances above the waves,<br>
       lighting hearts like stars in the night sky.<br>
       May your name echo where stars meet the sea.
     </div>
-    <div class="line hidden" id="line-ta">
+    <div class="line" id="line-ta">
       🌊 கடலின் ஆழத்திலிருந்து<br>
       விண்மீனின் ஒளிக்குச் செல்லும் பயணத்தில்,<br>
       'பிரகாசமான நட்சத்திரம்' இப்போது பிறந்த நாளைக் கொண்டாடுகிறார்.<br><br>
@@ -179,27 +200,29 @@
 
   <!-- 🌠 Scripts -->
   <script>
-    // Sentence toggle
     const lineEn = document.getElementById('line-en');
     const lineTa = document.getElementById('line-ta');
+
+    // Sentence toggle every 8 seconds
     setInterval(() => {
-      lineEn.classList.toggle('hidden');
-      lineTa.classList.toggle('hidden');
+      lineEn.classList.toggle('visible');
+      lineTa.classList.toggle('visible');
     }, 8000);
 
-    // Tap to toggle audio
+    // Audio toggle
     const audio = document.getElementById('bg-music');
-    window.addEventListener('click', () => {
+    const toggleBtn = document.getElementById('audio-toggle');
+
+    toggleBtn.addEventListener('click', () => {
       audio.muted = !audio.muted;
-      if (!audio.paused) {
-        audio.play().catch(err => console.warn("Playback issue:", err));
-      }
+      toggleBtn.textContent = audio.muted ? '🔇' : '🔊';
+      audio.play().catch(err => console.warn("Playback issue:", err));
     });
 
-    // Stars & gifts
+    // Stars
     function createStarRain() {
       const item = document.createElement('div');
-      const emojis = ['✦','✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
+      const emojis = ['✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
       item.className = 'star';
       item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
       item.style.left = Math.random() * 100 + 'vw';
