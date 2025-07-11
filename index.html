@@ -34,21 +34,23 @@
       background: radial-gradient(circle at center, #fff, #ccc);
       border-radius: 50%;
       box-shadow: 0 0 20px 6px #ffffff99;
-      z-index: 10;
+      z-index: 8;
       opacity: 0.85;
-      transition: transform 0.3s ease;
       cursor: pointer;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
 
     .moon.shake {
-      animation: shakeMoon 0.4s ease;
+      animation: shake 0.4s ease;
     }
 
-    @keyframes shakeMoon {
+    @keyframes shake {
       0% { transform: translate(0, 0); }
       25% { transform: translate(2px, -2px); }
       50% { transform: translate(-2px, 2px); }
-      75% { transform: translate(1px, -1px); }
+      75% { transform: translate(2px, 2px); }
       100% { transform: translate(0, 0); }
     }
 
@@ -158,7 +160,7 @@
 <body>
 
   <!-- 🌕 Moon -->
-  <div class="moon" id="moon" tabindex="0"></div>
+  <div class="moon" id="moon"></div>
 
   <!-- 🎵 Audio -->
   <audio id="bg-music" autoplay loop muted playsinline>
@@ -189,34 +191,33 @@
 
   <!-- 🌠 Scripts -->
   <script>
+    // Sentence toggle
     const lineEn = document.getElementById('line-en');
     const lineTa = document.getElementById('line-ta');
-    const moon = document.getElementById('moon');
-    const audio = document.getElementById('bg-music');
-
-    // Toggle sentence every 8 seconds
     setInterval(() => {
       lineEn.classList.toggle('hidden');
       lineTa.classList.toggle('hidden');
     }, 8000);
 
-    // Moon click = shake + toggle audio
+    // Moon audio toggle + shake
+    const moon = document.getElementById('moon');
+    const audio = document.getElementById('bg-music');
+
     moon.addEventListener('click', () => {
       moon.classList.add('shake');
-      setTimeout(() => moon.classList.remove('shake'), 400);
 
       if (audio.muted || audio.paused) {
         audio.muted = false;
-        audio.play().catch(e => console.warn('Play failed:', e));
+        audio.play().catch(e => {});
       } else {
         audio.muted = true;
+        audio.pause();
       }
+
+      setTimeout(() => moon.classList.remove('shake'), 400);
     });
 
-    // Prevent square highlight on click
-    moon.style.outline = 'none';
-
-    // Star rain
+    // Stars rain
     function createStarRain() {
       const item = document.createElement('div');
       const emojis = ['✦','✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
