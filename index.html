@@ -13,8 +13,6 @@
       font-family: 'Segoe UI', sans-serif;
       color: white;
       position: relative;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
     }
 
     body::before {
@@ -33,16 +31,15 @@
       left: 6vw;
       width: 8vw;
       height: 8vw;
+      min-width: 40px;
+      min-height: 40px;
       background: radial-gradient(circle at center, #fff, #ccc);
       border-radius: 50%;
       box-shadow: 0 0 20px 6px #ffffff99;
-      z-index: 8;
+      z-index: 20;
       opacity: 0.85;
-      transition: transform 0.2s ease;
-    }
-
-    .moon:active {
-      transform: scale(1.05);
+      cursor: pointer;
+      touch-action: manipulation;
     }
 
     .message {
@@ -150,11 +147,11 @@
 </head>
 <body>
 
-  <!-- 🌕 Moon -->
-  <div class="moon" id="moon-btn"></div>
+  <!-- 🌕 Moon (Audio Toggle) -->
+  <div class="moon" id="moon"></div>
 
   <!-- 🎵 Audio -->
-  <audio id="bg-music" autoplay loop playsinline>
+  <audio id="bg-music" autoplay loop muted playsinline>
     <source src="hb.mp3" type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
@@ -184,24 +181,31 @@
   <script>
     const lineEn = document.getElementById('line-en');
     const lineTa = document.getElementById('line-ta');
+    const moon = document.getElementById('moon');
     const audio = document.getElementById('bg-music');
-    const moon = document.getElementById('moon-btn');
 
-    // Toggle sentences
+    // Sentence toggle
     setInterval(() => {
       lineEn.classList.toggle('hidden');
       lineTa.classList.toggle('hidden');
     }, 8000);
 
-    // Toggle audio on moon click
+    // Moon tap to toggle audio (first click works)
+    let audioInitialized = false;
     moon.addEventListener('click', () => {
-      audio.muted = !audio.muted;
-      if (!audio.muted) {
-        audio.play().catch(err => console.warn("Audio error:", err));
+      if (!audioInitialized) {
+        audio.play().then(() => {
+          audio.muted = false;
+        }).catch(err => {
+          console.warn("Audio playback failed:", err);
+        });
+        audioInitialized = true;
+      } else {
+        audio.muted = !audio.muted;
       }
     });
 
-    // Star rain
+    // Stars & gifts
     function createStarRain() {
       const item = document.createElement('div');
       const emojis = ['✦','✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
