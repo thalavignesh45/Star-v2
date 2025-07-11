@@ -5,12 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Star of the Sea</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    body {
-      height: 100vh;
-      font-family: 'Segoe UI', sans-serif;
+    html, body {
+      height: 100%;
+      width: 100%;
       overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
       position: relative;
       color: white;
     }
@@ -25,6 +30,19 @@
       background: url('ocean-1.jpg') no-repeat center center;
       background-size: cover;
       z-index: -1;
+    }
+
+    .moon {
+      position: absolute;
+      top: 4vh;
+      left: 6vw;
+      width: 8vw;
+      height: 8vw;
+      background: radial-gradient(circle at center, #fff, #ccc);
+      border-radius: 50%;
+      box-shadow: 0 0 20px 6px #ffffff99;
+      z-index: 8;
+      opacity: 0.85;
     }
 
     .message {
@@ -127,17 +145,17 @@
       0% { left: -200px; opacity: 0; }
       10% { opacity: 1; }
       50% { left: 50vw; }
-      100% { left: 110vw; opacity: 0; }
+      100% { left: 100vw; opacity: 0; } /* FIXED from 110vw */
     }
 
     @media (max-width: 480px) {
       .message { font-size: 1em; }
+      .moon { width: 12vw; height: 12vw; }
     }
   </style>
 </head>
 <body>
-
-  <!-- 🎵 Audio -->
+  <!-- 🎵 Background Music -->
   <audio id="bg-music" autoplay loop muted playsinline>
     <source src="hb.mp3" type="audio/mpeg" />
     Your browser does not support the audio element.
@@ -153,7 +171,10 @@
     }, { once: true });
   </script>
 
-  <!-- ✨ Birthday Message -->
+  <!-- 🌕 Moon -->
+  <div class="moon"></div>
+
+  <!-- 🎉 Message -->
   <div class="message">
     <div class="text">
       ✨ Happy Birthday to the <strong>Star of the Sea</strong><br>
@@ -165,11 +186,11 @@
     <div class="emoji">🌟🌊</div>
   </div>
 
-  <!-- 🌠 Falling Star and Emoji Rain -->
+  <!-- ✦ Star Rain -->
   <script>
     function createStarRain() {
       const item = document.createElement('div');
-      const emojis = ['✦', '✦', '✦', '🎁', '🎂', '🎉', '🎈', '🍬'];
+      const emojis = ['✦','✦','✦','✦','✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
       item.className = 'star';
       item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
       item.style.left = Math.random() * 100 + 'vw';
@@ -191,8 +212,7 @@
       setTimeout(() => comet.remove(), 14000);
     }
     setInterval(createComet, 16000);
-    createComet(); // Start one immediately
+    createComet();
   </script>
-
 </body>
 </html>
