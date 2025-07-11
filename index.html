@@ -52,7 +52,7 @@
     }
 
     .line {
-      font-size: 1.1em;
+      font-size: 1em;
       font-weight: 500;
       background: linear-gradient(90deg, #fefcea, #f1da36);
       -webkit-background-clip: text;
@@ -63,13 +63,10 @@
 
     .line.hidden {
       opacity: 0;
-      position: absolute;
-      top: 0;
-      left: 0;
     }
 
     #line-ta {
-      font-size: 0.9em;
+      font-size: 0.88em;
     }
 
     @keyframes fadein {
@@ -100,7 +97,7 @@
     }
 
     .comet {
-      position: fixed;
+      position: absolute;
       top: 13vh;
       left: 0;
       width: 160px;
@@ -113,6 +110,7 @@
       z-index: 9;
       opacity: 0.9;
       will-change: transform;
+      pointer-events: none;
     }
 
     .comet::before {
@@ -139,7 +137,7 @@
     @media (max-width: 480px) {
       .moon { width: 12vw; height: 12vw; }
       .line { font-size: 0.9em; }
-      #line-ta { font-size: 0.8em; }
+      #line-ta { font-size: 0.74em; line-height: 1.4; }
     }
   </style>
 </head>
@@ -177,26 +175,24 @@
 
   <!-- 🌠 Scripts -->
   <script>
+    // Sentence toggle
     const lineEn = document.getElementById('line-en');
     const lineTa = document.getElementById('line-ta');
-    const audio = document.getElementById('bg-music');
-    let hasUserInteracted = false;
-
     setInterval(() => {
       lineEn.classList.toggle('hidden');
       lineTa.classList.toggle('hidden');
     }, 8000);
 
+    // Tap to toggle audio
+    const audio = document.getElementById('bg-music');
     window.addEventListener('click', () => {
-      if (!hasUserInteracted) {
-        audio.muted = false;
+      audio.muted = !audio.muted;
+      if (!audio.paused) {
         audio.play().catch(err => console.warn("Playback issue:", err));
-        hasUserInteracted = true;
-      } else {
-        audio.muted = !audio.muted;
       }
     });
 
+    // Stars & gifts
     function createStarRain() {
       const item = document.createElement('div');
       const emojis = ['✦','✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
@@ -211,6 +207,7 @@
     }
     setInterval(createStarRain, 100);
 
+    // Comet
     function createComet() {
       const comet = document.createElement('div');
       comet.className = 'comet';
