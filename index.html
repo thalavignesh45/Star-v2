@@ -27,46 +27,47 @@
 
     .moon {
       position: absolute;
-      top: 4vh;
+      top: 2.8vh;
       left: 6vw;
       width: 8vw;
       height: 8vw;
       background: radial-gradient(circle at center, #fff, #ccc);
       border-radius: 50%;
       box-shadow: 0 0 20px 6px #ffffff99;
-      z-index: 10;
+      z-index: 8;
       opacity: 0.85;
-      cursor: pointer;
       transition: transform 0.3s ease;
+      user-select: none;
+    }
+
+    .moon:active {
       outline: none;
-      border: none;
-      appearance: none;
-      -webkit-tap-highlight-color: transparent;
     }
 
-    .moon.shake {
-      animation: shakeMoon 0.5s ease;
+    .shake {
+      animation: shake 0.4s ease;
     }
 
-    @keyframes shakeMoon {
+    @keyframes shake {
       0% { transform: translate(0, 0); }
-      25% { transform: translate(-2px, 2px); }
-      50% { transform: translate(2px, -2px); }
-      75% { transform: translate(-2px, -2px); }
+      25% { transform: translate(-2px, 1px); }
+      50% { transform: translate(2px, -1px); }
+      75% { transform: translate(-1px, 1px); }
       100% { transform: translate(0, 0); }
     }
 
     .message {
       position: absolute;
-      top: 50%;
+      top: 52%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 90%;
-      max-width: 600px;
+      width: 92%;
+      max-width: 620px;
       text-align: center;
       z-index: 5;
       animation: fadein 2s ease-in;
       line-height: 1.6;
+      padding: 0 5px;
     }
 
     .line {
@@ -127,6 +128,7 @@
       animation: flyComet 14s linear forwards;
       z-index: 9;
       opacity: 0.9;
+      will-change: transform;
       pointer-events: none;
     }
 
@@ -161,7 +163,7 @@
 <body>
 
   <!-- 🌕 Moon -->
-  <div class="moon" id="moon" tabindex="0" role="button" aria-label="moon sound toggle"></div>
+  <div class="moon" id="moon"></div>
 
   <!-- 🎵 Audio -->
   <audio id="bg-music" autoplay loop muted playsinline>
@@ -173,7 +175,6 @@
   <div class="message">
     <div class="line" id="line-en">
       ✨ Happy Birthday to the <strong>Star of the Sea</strong><br>
-      A soul as radiant as the cosmos,<br>
       a spark that dances above the waves,<br>
       lighting hearts like stars in the night sky.<br>
       May your name echo where stars meet the sea.
@@ -192,34 +193,29 @@
 
   <!-- 🌠 Scripts -->
   <script>
-    const audio = document.getElementById('bg-music');
-    const moon = document.getElementById('moon');
-    let audioStarted = false;
-
-    moon.addEventListener('click', () => {
-      // Shake animation
-      moon.classList.add('shake');
-      setTimeout(() => moon.classList.remove('shake'), 500);
-
-      // Toggle audio
-      if (!audioStarted) {
-        audio.muted = false;
-        audio.play().catch(err => console.warn("Playback failed:", err));
-        audioStarted = true;
-      } else {
-        audio.muted = !audio.muted;
-      }
-    });
-
-    // Sentence fade toggle
     const lineEn = document.getElementById('line-en');
     const lineTa = document.getElementById('line-ta');
+    const moon = document.getElementById('moon');
+    const audio = document.getElementById('bg-music');
+
+    // Sentence toggle
     setInterval(() => {
       lineEn.classList.toggle('hidden');
       lineTa.classList.toggle('hidden');
     }, 8000);
 
-    // Stars
+    // Moon click: play audio and shake
+    moon.addEventListener('click', () => {
+      moon.classList.add('shake');
+      setTimeout(() => moon.classList.remove('shake'), 400);
+
+      if (audio.muted) {
+        audio.muted = false;
+        audio.play().catch(err => console.warn("Playback issue:", err));
+      }
+    });
+
+    // Star rain
     function createStarRain() {
       const item = document.createElement('div');
       const emojis = ['✦','✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
@@ -234,7 +230,7 @@
     }
     setInterval(createStarRain, 100);
 
-    // Comets
+    // Comet
     function createComet() {
       const comet = document.createElement('div');
       comet.className = 'comet';
