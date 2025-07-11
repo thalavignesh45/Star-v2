@@ -52,6 +52,9 @@
     }
 
     .line {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
       font-size: 1em;
       font-weight: 500;
       background: linear-gradient(90deg, #fefcea, #f1da36);
@@ -63,6 +66,7 @@
 
     .line.hidden {
       opacity: 0;
+      pointer-events: none;
     }
 
     #line-ta {
