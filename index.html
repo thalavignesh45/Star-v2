@@ -52,7 +52,7 @@
     }
 
     .line {
-      font-size: 1em;
+      font-size: 1.1em;
       font-weight: 500;
       background: linear-gradient(90deg, #fefcea, #f1da36);
       -webkit-background-clip: text;
@@ -63,6 +63,13 @@
 
     .line.hidden {
       opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    #line-ta {
+      font-size: 0.9em;
     }
 
     @keyframes fadein {
@@ -93,7 +100,7 @@
     }
 
     .comet {
-      position: absolute;
+      position: fixed;
       top: 13vh;
       left: 0;
       width: 160px;
@@ -131,7 +138,8 @@
 
     @media (max-width: 480px) {
       .moon { width: 12vw; height: 12vw; }
-      .line { font-size: 0.8em; }
+      .line { font-size: 0.9em; }
+      #line-ta { font-size: 0.8em; }
     }
   </style>
 </head>
@@ -169,24 +177,26 @@
 
   <!-- 🌠 Scripts -->
   <script>
-    // Toggle Tamil/English sentences
     const lineEn = document.getElementById('line-en');
     const lineTa = document.getElementById('line-ta');
+    const audio = document.getElementById('bg-music');
+    let hasUserInteracted = false;
+
     setInterval(() => {
       lineEn.classList.toggle('hidden');
       lineTa.classList.toggle('hidden');
-    }, 8000); // switch every 8 seconds
+    }, 8000);
 
-    // Audio toggle on tap
-    const audio = document.getElementById('bg-music');
     window.addEventListener('click', () => {
-      audio.muted = !audio.muted;
-      if (!audio.paused) {
+      if (!hasUserInteracted) {
+        audio.muted = false;
         audio.play().catch(err => console.warn("Playback issue:", err));
+        hasUserInteracted = true;
+      } else {
+        audio.muted = !audio.muted;
       }
     });
 
-    // Star rain
     function createStarRain() {
       const item = document.createElement('div');
       const emojis = ['✦','✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
@@ -201,7 +211,6 @@
     }
     setInterval(createStarRain, 100);
 
-    // Comet
     function createComet() {
       const comet = document.createElement('div');
       comet.className = 'comet';
@@ -209,7 +218,7 @@
       setTimeout(() => comet.remove(), 14000);
     }
     setInterval(createComet, 16000);
-    createComet(); // initial
+    createComet();
   </script>
 </body>
 </html>
