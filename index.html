@@ -3,17 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Poonguyil Wishes</title>
+  <title>Happy Birthday – Star of the Sea</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      height: 100vh;
-      font-family: 'Segoe UI', sans-serif;
-      overflow: hidden;
-      position: relative;
-      color: white;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
+    body {
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      position: relative;
+    }
+
+    /* ✅ Fixed background */
     body::before {
       content: '';
       position: fixed;
@@ -21,7 +27,23 @@
       width: 100%; height: 100%;
       background: url('ocean-1.jpg') no-repeat center center;
       background-size: cover;
-      z-index: -2;
+      z-index: -1;
+    }
+
+    /* 🎵 Mute button */
+    #mute-toggle {
+      position: fixed;
+      top: 10px;
+      right: 15px;
+      font-size: 22px;
+      background: rgba(0, 0, 0, 0.3);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      z-index: 20;
+      width: 36px;
+      height: 36px;
     }
 
     .moon {
@@ -37,74 +59,36 @@
       opacity: 0.85;
     }
 
-    .flag {
-      position: absolute;
-      top: 1vh;
-      left: 7vw;
-      z-index: 10;
-      animation: appearFlag 6s ease-in-out infinite;
-    }
-
-    .flag-pole {
-      width: 2px;
-      height: 40px;
-      background: #888;
-      margin-left: 10px;
-    }
-
-    .flag-banner {
-      background: red;
-      color: white;
-      font-size: 10px;
-      font-weight: bold;
-      padding: 2px 6px;
-      border-radius: 2px 6px 6px 2px;
-      animation: wave 1s infinite ease-in-out alternate;
-      transform-origin: left;
-      white-space: nowrap;
-    }
-
-    @keyframes wave {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(4deg); }
-    }
-
-    @keyframes appearFlag {
-      0%, 70% { opacity: 0; transform: scale(0.8); }
-      75%, 90% { opacity: 1; transform: scale(1); }
-      100% { opacity: 0; transform: scale(0.8); }
-    }
-
     .message {
       position: absolute;
       top: 45%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 1.2em;
-      font-weight: 500;
       text-align: center;
       z-index: 10;
       padding: 0 15px;
-      line-height: 1.6;
       animation: fadein 2s ease-in;
+      line-height: 1.6;
     }
 
-    .text {
+    .english, .tamil {
       background: linear-gradient(90deg, #fefcea, #f1da36);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      display: inline-block;
-      transition: opacity 1s ease;
+      display: none;
     }
 
-    .emoji {
-      display: inline-block;
-      margin-top: 10px;
+    .tamil {
+      font-size: 0.85em;
     }
 
     @keyframes fadein {
       0% { opacity: 0; transform: translate(-50%, -40%) }
       100% { opacity: 1; transform: translate(-50%, -50%) }
+    }
+
+    .emoji {
+      margin-top: 10px;
     }
 
     .star {
@@ -165,128 +149,110 @@
       50% { left: 50vw; }
       100% { left: 110vw; opacity: 0; }
     }
-
-    #audio-toggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-family: 'Segoe UI', sans-serif;
-      font-size: 14px;
-      cursor: pointer;
-      user-select: none;
-      z-index: 100;
-      transition: background 0.3s;
-    }
-
-    @media (max-width: 480px) {
-      .message { font-size: 1em; }
-      .moon { width: 12vw; height: 12vw; }
-    }
   </style>
 </head>
 <body>
-  <!-- Audio -->
-  <audio id="bg-music" loop playsinline>
-    <source src="hb.mp3" type="audio/mpeg" />
-    Your browser does not support the audio element.
-  </audio>
 
-  <div id="audio-toggle">🔊 Music</div>
+<!-- 🔇🔊 Mute toggle -->
+<button id="mute-toggle">🔇</button>
 
-  <!-- Moon + Flag -->
-  <div class="moon"></div>
-  <div class="flag">
-    <div class="flag-pole"></div>
-    <div class="flag-banner">பூங்குயில் குரூப்ஸ்</div>
+<!-- 🎵 Background Music -->
+<audio id="bg-music" autoplay loop muted playsinline>
+  <source src="hb.mp3" type="audio/mpeg" />
+  Your browser does not support the audio element.
+</audio>
+
+<!-- 🌕 Moon -->
+<div class="moon"></div>
+
+<!-- 🌟 Birthday Message -->
+<div class="message">
+  <div class="english text">
+    ✨ Happy Birthday to the <strong>Star of the Sea</strong><br>
+    A soul as radiant as the cosmos,<br>
+    a spark that dances above the waves,<br>
+    lighting hearts like stars in the night sky.<br>
+    May your name echo where stars meet the sea.
   </div>
 
-  <!-- Message -->
-  <div class="message">
-    <div class="text" id="wish-text">
-      ✨ Happy Birthday to the Star of the Sea.<br>
-      A soul as radiant as the cosmos,<br>
-      dancing above the waves,<br>
-      lighting hearts like stars in the night sky.<br>
-      May your name echo where stars meet the sea. 🌊
-    </div>
-    <div class="emoji">🌟🌊</div>
+  <div class="tamil text">
+    🌊 கடலின் ஆழத்திலிருந்து<br>
+    விண்மீனின் ஒளிக்குச் செல்லும் பயணத்தில்,<br>
+    'பிரகாசமான நட்சத்திரம்' இப்போது பிறந்த நாளைக் கொண்டாடுகிறார்.<br><br>
+    ✨ உங்கள் ஒவ்வொரு நாளும்,<br>
+    ஒரு நட்சத்திரம் போலத் திகழட்டும்,<br>
+    ஒரு அலை போல பறக்கட்டும்.<br><br>
+    💫 பூங்குயில் குரூப்ஸ் சார்பாக,<br>
+    மனமார்ந்த பிறந்த நாள் நல்வாழ்த்துகள்!
   </div>
 
-  <!-- JS -->
-  <script>
-    // Star Rain
-    function createStarRain() {
-      const item = document.createElement('div');
-      const emojis = ['✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
-      item.className = 'star';
-      item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-      item.style.left = Math.random() * 100 + 'vw';
-      item.style.fontSize = (4 + Math.random() * 4) + 'px';
-      const duration = (2 + Math.random() * 3);
-      item.style.animationDuration = `${duration}s, 1.5s`;
-      document.body.appendChild(item);
-      setTimeout(() => item.remove(), duration * 1000);
+  <div class="emoji">🌟🌊</div>
+</div>
+
+<!-- ✨ Star Rain -->
+<script>
+  function createStarRain() {
+    const item = document.createElement('div');
+    const emojis = ['✦','✦','✦','✦','🎁','🎂','🎉','🎈','🍬'];
+    item.className = 'star';
+    item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+    item.style.left = Math.random() * 100 + 'vw';
+    item.style.fontSize = (4 + Math.random() * 4) + 'px';
+    const duration = (2 + Math.random() * 3);
+    item.style.animationDuration = `${duration}s, 1.5s`;
+    document.body.appendChild(item);
+    setTimeout(() => item.remove(), duration * 1000);
+  }
+  setInterval(createStarRain, 100);
+</script>
+
+<!-- ☄️ Comets -->
+<script>
+  function createComet() {
+    const comet = document.createElement('div');
+    comet.className = 'comet';
+    document.body.appendChild(comet);
+    setTimeout(() => comet.remove(), 14000);
+  }
+  setInterval(createComet, 16000);
+  createComet();
+</script>
+
+<!-- 🔁 Message toggle -->
+<script>
+  const english = document.querySelector('.english');
+  const tamil = document.querySelector('.tamil');
+
+  function toggleMessages() {
+    if (english.style.display === 'none') {
+      english.style.display = 'inline-block';
+      tamil.style.display = 'none';
+    } else {
+      english.style.display = 'none';
+      tamil.style.display = 'inline-block';
     }
-    setInterval(createStarRain, 100);
+  }
 
-    // Comet
-    function createComet() {
-      const comet = document.createElement('div');
-      comet.className = 'comet';
-      document.body.appendChild(comet);
-      setTimeout(() => comet.remove(), 14000);
-    }
-    setInterval(createComet, 16000);
-    createComet();
+  english.style.display = 'inline-block';
+  setInterval(toggleMessages, 6000); // every 6 seconds
+</script>
 
-    // Toggle Wish Text (English / Tamil)
-    const wishText = document.getElementById('wish-text');
-    const en = `✨ Happy Birthday to the Star of the Sea.<br>
-      A soul as radiant as the cosmos,<br>
-      dancing above the waves,<br>
-      lighting hearts like stars in the night sky.<br>
-      May your name echo where stars meet the sea. 🌊`;
-    const ta = `🌊 கடலின் ஆழத்திலிருந்து<br>
-விண்மீனின் ஒளிக்குச் செல்லும் பயணத்தில்,<br>
-'பிரகாசமான நட்சத்திரம்' இப்போது பிறந்த நாளைக் கொண்டாடுகிறார்.<br><br>
-✨ உங்கள் ஒவ்வொரு நாளும்,<br>
-ஒரு நட்சத்திரம் போலத் திகழட்டும்,<br>
-ஒரு அலை போல பறக்கட்டும்.<br><br>
-💫 பூங்குயில் குரூப்ஸ் சார்பாக, மனமார்ந்த பிறந்த நாள் நல்வாழ்த்துகள்!`;
+<!-- 🔊 Mute toggle -->
+<script>
+  const audio = document.getElementById('bg-music');
+  const btn = document.getElementById('mute-toggle');
 
-    let showTamil = false;
-    setInterval(() => {
-      wishText.style.opacity = 0;
-      setTimeout(() => {
-        wishText.innerHTML = showTamil ? en : ta;
-        wishText.style.opacity = 1;
-        showTamil = !showTamil;
-      }, 1000);
-    }, 9000);
+  btn.addEventListener('click', () => {
+    audio.muted = !audio.muted;
+    btn.textContent = audio.muted ? '🔇' : '🔊';
+  });
 
-    // Audio Toggle
-    const audio = document.getElementById('bg-music');
-    const toggle = document.getElementById('audio-toggle');
-    let isPlaying = false;
-    toggle.addEventListener('click', async () => {
-      try {
-        if (!isPlaying) {
-          await audio.play();
-          toggle.textContent = '🔇 Mute';
-          isPlaying = true;
-        } else {
-          audio.pause();
-          toggle.textContent = '🔊 Music';
-          isPlaying = false;
-        }
-      } catch (e) {
-        console.warn("Playback error:", e);
-      }
-    });
-  </script>
+  window.addEventListener('click', function () {
+    audio.muted = false;
+    audio.play().catch(() => {});
+    btn.textContent = '🔊';
+  }, { once: true });
+</script>
+
 </body>
 </html>
